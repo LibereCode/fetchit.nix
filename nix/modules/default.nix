@@ -47,19 +47,19 @@
             };
           };
 
-          config = lib.mkIf cfg.enable {
-            home.packages = [ pkg ];
-
-            xdg.configFile."fetchit" =
-              if cfg.initLua != null then
-                {
-                  text = cfg.initLua;
-                }
-              else
-                {
-                  source = "${cfg.package}/share/pkgit/config";
-                };
-          };
         };
+      config = lib.mkIf cfg.enable {
+        home.packages = [ pkg ];
+
+        xdg.configFile."fetchit" =
+          if cfg.initLua != null then
+            {
+              text = cfg.initLua;
+            }
+          else
+            {
+              source = "${cfg.package}/share/pkgit/config";
+            };
+      };
     };
 }
