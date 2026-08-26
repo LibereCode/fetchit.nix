@@ -113,7 +113,7 @@
         }
         ++ (
           if cfg.logos != null then
-            lib.mapAttrs' (name: value: lib.nameValuePair ("fetchit/" + name) { text = value; }) cfg.logos
+            builtins.mapAttrs (name: value: { "fetchit/${name}".text = value; }) cfg.logos
           else
             {
               "fetchit/logos/logo.txt".source = "${cfg.package}/share/pkgit/config/logos/logo.txt";
