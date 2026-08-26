@@ -22,7 +22,7 @@
             ;
         in
         {
-          packages.fetchit = {
+          programs.fetchit = {
             enable = mkEnableOption "fetchit";
 
             package = mkOption {
