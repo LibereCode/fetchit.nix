@@ -2,7 +2,7 @@
 {
   imports = [
     ./packages
-    # ./modules #TODO:
+    ./modules
   ];
 
   systems = [

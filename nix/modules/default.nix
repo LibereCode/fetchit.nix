@@ -22,7 +22,7 @@
             ;
         in
         {
-          packages.fetchit = {
+          programs.fetchit = {
             enable = mkEnableOption "fetchit";
 
             package = mkOption {
@@ -31,16 +31,35 @@
               description = lib.literalMD "`fetchit` **package** to use.";
             };
 
-            settings = mkOption {
+            # settings = mkOption {
+            # };
+
+            initLua = lib.mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = lib.literalMD ''
+                init.lua as a stringblock.
+                If you want to source an external file, simply use:
+                ```nix
+                initLua = builtins.readFile ./init.lua;
+                ```
+              '';
             };
-
           };
 
-          config = lib.mkIf cfg.enable {
-            home.packages = [ pkg ];
-
-            xdg.configFile."fetchit".source = "${cfg.package}/share/pkgit/config";
-          };
         };
+      config = lib.mkIf cfg.enable {
+        home.packages = [ pkg ];
+
+        xdg.configFile."fetchit" =
+          if cfg.initLua != null then
+            {
+              text = cfg.initLua;
+            }
+          else
+            {
+              source = "${cfg.package}/share/pkgit/config";
+            };
+      };
     };
 }
