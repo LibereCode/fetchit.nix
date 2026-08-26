@@ -1,5 +1,8 @@
 # Fetchit-flake
 
+> [!INFO] THIS REPO HAS BEEN MOVED TO [codeberg fetchit fork](https://codeberg.org/Kashnomo/fetchit-flake/src/branch/master)
+
+
 ## ABOUT
 
 A **nix** wrapper of the [fastfetch](https://github.com/fastfetch-cli/fastfetch) alternative:
