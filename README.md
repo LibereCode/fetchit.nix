@@ -16,7 +16,8 @@ A **nix** wrapper of the [fastfetch](https://github.com/fastfetch-cli/fastfetch)
     # ... other inputs
 
     omnisearch-flake = {
-      url = "github:liberecode/omnisearch-flake";
+      # url = "github:liberecode/omnisearch-flake";
+      url = "git+https://codeberg.org/Kashnomo/fetchit-flake?ref=master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
