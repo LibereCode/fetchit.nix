@@ -31,6 +31,7 @@
               description = lib.literalMD "`fetchit` **package** to use.";
             };
 
+            # TODO ?
             # settings = mkOption {
             # };
 
@@ -45,20 +46,42 @@
                 ```
               '';
             };
+
+            #TODO: attrs set of { logo_path = logo_text; ... };
+            logo = lib.mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = lib.literalMD ''
+                logo.txt as a stringblock.
+                If you want to source an external file, simply use:
+                ```nix
+                logo = builtins.readFile ./logo.txt;
+                ```
+              '';
+            };
           };
 
         };
       config = lib.mkIf cfg.enable {
         home.packages = [ pkg ];
 
-        xdg.configFile."fetchit" =
+        xdg.configFile."fetchit/init.lua" =
           if cfg.initLua != null then
             {
               text = cfg.initLua;
             }
           else
             {
-              source = "${cfg.package}/share/pkgit/config";
+              source = "${cfg.package}/share/pkgit/config/init.lua";
+            };
+        xdg.configFile."fetchit/logos/logo.txt" =
+          if cfg.logo != null then
+            {
+              text = cfg.logo;
+            }
+          else
+            {
+              source = "${cfg.package}/share/pkgit/config/logos/logo.txt";
             };
       };
     };
