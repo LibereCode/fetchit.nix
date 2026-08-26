@@ -48,19 +48,6 @@
                 '';
               };
 
-              # #FIXME: attrs set of { logo_path = logo_text; ... };
-              # logo = lib.mkOption {
-              #   type = types.nullOr types.str;
-              #   default = null;
-              #   description = lib.literalMD ''
-              #     logo.txt as a stringblock.
-              #     If you want to source an external file, simply use:
-              #     ```nix
-              #     logo = builtins.readFile ./logo.txt;
-              #     ```
-              #   '';
-              # };
-
               logos = lib.mkOption {
                 type = types.nullOr (types.attrsOf types.str);
                 default = null;
