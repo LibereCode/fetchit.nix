@@ -58,9 +58,6 @@ home.packages = [
 
 ### home-manager module
 
-> [!WARNING]
-> NOT IMPLEMENTED YET
-
 ```nix modules/home/fetchit/default.nix
 ## Anywhere in your nix (home-manager) configuration.
 ## This examples show for a new file that has been imported at:
@@ -76,45 +73,43 @@ home.packages = [
     programs.fetchit = {
       enable = true;
 
-      ## Will be applied to omnisearch's config.ini
-      settings = {
-        ## ... settings here ...
-        ## example that evaluates to the original example:
-        column_padding = 2;
-        art = {
-          source = "./logo.txt";
-        };
-        functions = {
-          fetch = {
-            ## (need to be a list of lists)
-            columns = [
-              [
-                "art.out"
-              ]
-              [
-                "color.red(user.name .. '@' .. host.name)"
-                "color.yellow('os:')"
-                "color.green('kernel:')"
-                "color.cyan('cpu:')"
-                "color.blue('gpu:')"
-                "color.magenta('ram:')"
-              ]
-              [
-                "''"
-                "string.lower(os.name)"
-                "string.lower(kernel.sysname)..' '..kernel.release"
-                "string.lower(cpu.name)"
-                "string.lower(gpu.name)"
-                ''
-                string.format(
-                  '%.1fGB/%.1fGB (%.1f%%)',
-                  memory.used_gb, memory.total_gb, memory.percent
-                )
-                ''
-              ]
-            ];
-          };
-        };
+      ## if null will use default
+      initLua = ''
+        -- HELLO WORLD !
+        column_padding = 2
+        art = { source = "./logo2.txt" }
+        function fetch()
+          return {
+            columns = {
+              art.out,
+              {
+                color.red(user.name .. "@" .. host.name),
+                color.yellow("os:"),
+              },
+              {
+                "",
+                string.lower(os.name),
+              }
+            }
+          }
+        end
+      '';
+
+      ## if null will use default
+      logos = {
+        ## Files added to ~/.config/fetchit/*
+        "logos/logo.txt" = ''
+          *------*
+          | 0  0 |
+          |  --  |
+          *------*
+        '';
+        logo2 = ''
+           /\_/\ Schröd?
+          ( X_* )..   ((
+          >= ^ <=  _))
+          (__x__)-(__|-'
+        '';
       };
     };
   };
