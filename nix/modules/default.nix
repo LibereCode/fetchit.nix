@@ -47,9 +47,21 @@
               '';
             };
 
-            #TODO: attrs set of { logo_path = logo_text; ... };
-            logo = lib.mkOption {
-              type = types.nullOr types.str;
+            # #FIXME: attrs set of { logo_path = logo_text; ... };
+            # logo = lib.mkOption {
+            #   type = types.nullOr types.str;
+            #   default = null;
+            #   description = lib.literalMD ''
+            #     logo.txt as a stringblock.
+            #     If you want to source an external file, simply use:
+            #     ```nix
+            #     logo = builtins.readFile ./logo.txt;
+            #     ```
+            #   '';
+            # };
+
+            logos = lib.mkOption {
+              type = types.nullOr (types.attrsOf types.str);
               default = null;
               description = lib.literalMD ''
                 logo.txt as a stringblock.
@@ -58,6 +70,18 @@
                 logo = builtins.readFile ./logo.txt;
                 ```
               '';
+              example = {
+                "logo1.txt" = ''
+                  2 line
+                  logo
+                '';
+                logo2 = ''
+                   /\_/\ Schröd?
+                  ( X_* )..   ((
+                  >= ^ <=  _))
+                  (__x__)-(__|-'
+                '';
+              };
             };
           };
 
@@ -65,24 +89,36 @@
       config = lib.mkIf cfg.enable {
         home.packages = [ pkg ];
 
-        xdg.configFile."fetchit/init.lua" =
-          if cfg.initLua != null then
-            {
-              text = cfg.initLua;
-            }
+        xdg.configFile = {
+          "fetchit/init.lua" =
+            if cfg.initLua != null then
+              {
+                text = cfg.initLua;
+              }
+            else
+              {
+                source = "${cfg.package}/share/pkgit/config/init.lua";
+              };
+
+          # #FIXME: See above
+          # "fetchit/logos/logo.txt" =
+          #   if cfg.logo != null then
+          #     {
+          #       text = cfg.logo;
+          #     }
+          #   else
+          #     {
+          #       source = "${cfg.package}/share/pkgit/config/logos/logo.txt";
+          #     };
+        }
+        ++ (
+          if cfg.logos != null then
+            lib.mapAttrs' (name: value: lib.nameValuePair ("fetchit/" + name) { text = value; }) cfg.logos
           else
             {
-              source = "${cfg.package}/share/pkgit/config/init.lua";
-            };
-        xdg.configFile."fetchit/logos/logo.txt" =
-          if cfg.logo != null then
-            {
-              text = cfg.logo;
+              "fetchit/logos/logo.txt".source = "${cfg.package}/share/pkgit/config/logos/logo.txt";
             }
-          else
-            {
-              source = "${cfg.package}/share/pkgit/config/logos/logo.txt";
-            };
+        );
       };
     };
 }
