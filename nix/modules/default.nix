@@ -1,6 +1,6 @@
 { inputs, self, ... }:
 {
-  flake.homeModules.default =
+  flake.homeModules.fetchit =
     per@{
       config,
       lib,
@@ -67,13 +67,15 @@
                 logo.txt as a stringblock.
                 If you want to source an external file, simply use:
                 ```nix
-                logo = builtins.readFile ./logo.txt;
+                logos = { "logos/logo.txt" = builtins.readFile ./logo.txt; };
                 ```
               '';
               example = {
-                "logo1.txt" = ''
-                  2 line
-                  logo
+                "logos/logo.txt" = ''
+                  *------*
+                  | 0  0 |
+                  |  --  |
+                  *------*
                 '';
                 logo2 = ''
                    /\_/\ Schröd?
@@ -100,20 +102,10 @@
                 source = "${cfg.package}/share/pkgit/config/init.lua";
               };
 
-          # #FIXME: See above
-          # "fetchit/logos/logo.txt" =
-          #   if cfg.logo != null then
-          #     {
-          #       text = cfg.logo;
-          #     }
-          #   else
-          #     {
-          #       source = "${cfg.package}/share/pkgit/config/logos/logo.txt";
-          #     };
         }
-        ++ (
+        // (
           if cfg.logos != null then
-            builtins.mapAttrs (name: value: { "fetchit/${name}".text = value; }) cfg.logos
+            lib.mapAttrs' (name: value: lib.nameValuePair ("fetchit/" + name) { text = value; }) cfg.logos
           else
             {
               "fetchit/logos/logo.txt".source = "${cfg.package}/share/pkgit/config/logos/logo.txt";
