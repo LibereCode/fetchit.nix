@@ -35,7 +35,7 @@
             # };
 
             initLua = lib.mkOption {
-              type = types.nullOr types.string;
+              type = types.nullOr types.str;
               default = null;
               description = lib.literalMD ''
                 init.lua as a stringblock.
