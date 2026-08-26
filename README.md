@@ -1,6 +1,7 @@
 # Fetchit-flake
 
-> ![INFO] THIS REPO HAS BEEN MOVED TO [codeberg fetchit fork](https://codeberg.org/Kashnomo/fetchit-flake/src/branch/master)
+> [!INFO]
+> THIS REPO HAS BEEN MOVED TO [codeberg fetchit fork](https://codeberg.org/Kashnomo/fetchit-flake/src/branch/master)
 
 
 ## ABOUT
